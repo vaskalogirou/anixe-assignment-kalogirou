@@ -14,7 +14,9 @@ import org.springframework.core.env.Environment;
 @Aspect
 public class LoggingAspect {
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	// this is NOT the default logger - it is a custom one, that writes to file
+	// and we use it ONLY for the controller package where the user requests reside
+	private final Logger logger = LoggerFactory.getLogger("file-logger");
 
 	private final Environment env;
 
@@ -33,13 +35,13 @@ public class LoggingAspect {
 		String declaringName = signature.getDeclaringTypeName();
 		String argsStr = Arrays.toString(joinPoint.getArgs());
 
-		log.info("Enter: {}.{}() with argument[s] = {}", declaringName, signatureName, argsStr);
+		logger.info("Enter: {}.{}() with argument[s] = {}", declaringName, signatureName, argsStr);
 		try {
 			Object result = joinPoint.proceed();
-			log.info("Exit: {}.{}() with result = {}", declaringName, signatureName, result);
+			logger.info("Exit: {}.{}() with result = {}", declaringName, signatureName, result);
 			return result;
 		} catch (IllegalArgumentException e) {
-			log.error("Illegal argument: {} in {}.{}()", argsStr, declaringName, signatureName);
+			logger.error("Illegal argument: {} in {}.{}()", argsStr, declaringName, signatureName);
 			throw e;
 		}
 	}
