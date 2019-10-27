@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="00000000000000" author="kalogirou">
+		<createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50" />
+
+		<createTable tableName="hotel">
+			<column name="id" type="bigint" autoIncrement="${autoIncrement}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="varchar(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="address" type="varchar(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="star_rating" type="decimal(2,1)">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<createTable tableName="booking">
+			<column name="id" type="bigint" autoIncrement="${autoIncrement}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="customer_name" type="varchar(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="customer_surname" type="varchar(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="number_of_pax" type="smallint">
+				<constraints nullable="false" />
+			</column>
+			<column name="hotel_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint baseColumnNames="hotel_id"
+								 baseTableName="booking"
+								 constraintName="fk_booking_hotel_id"
+								 referencedColumnNames="id"
+								 referencedTableName="hotel" />
+	</changeSet>
+</databaseChangeLog>
