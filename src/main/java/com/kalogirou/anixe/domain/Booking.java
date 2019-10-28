@@ -23,7 +23,7 @@ public class Booking implements Serializable {
 
 	private Float priceAmount;
 	private String currency;
-	private Float priceAmountInEuro;
+	private Float currentRateToEuro;
 
 	public Long getId() {
 		return id;
@@ -81,11 +81,11 @@ public class Booking implements Serializable {
 		this.currency = currency;
 	}
 
-	public Float getPriceAmountInEuro() {
-		return priceAmountInEuro;
+	public Float getCurrentRateToEuro() {
+		return currentRateToEuro;
 	}
 
-	public void setPriceAmountInEuro(Float priceAmountInEuro) {
-		this.priceAmountInEuro = priceAmountInEuro;
+	public void setCurrentRateToEuro(Float currentRateToEuro) {
+		this.currentRateToEuro = currentRateToEuro;
 	}
 }
