@@ -4,3 +4,5 @@ spring:
     url: jdbc:postgresql://localhost:5432/anixe
     username: postgres
     password: admin
+    hikari:
+      auto-commit: false

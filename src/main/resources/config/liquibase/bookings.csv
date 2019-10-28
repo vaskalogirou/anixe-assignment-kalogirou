@@ -1,0 +1,5 @@
+id;customer_name;customer_surname;number_of_pax;hotel_id;price_amount;currency;price_amount_in_euro
+1;John;Doe;2;1;200;EUR;200
+2;Michael;Jackson;1;1;100;USD;87.5
+3;Leo;Tolstoy;5;1;50000;RUB;714.82
+4;Leo;Tolstoy;1;2;1200;RUB;170.14
