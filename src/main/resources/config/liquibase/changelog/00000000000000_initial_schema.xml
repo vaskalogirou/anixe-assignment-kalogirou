@@ -5,8 +5,7 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<changeSet id="00000000000000" author="kalogirou">
-		<createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50" />
-
+		<createSequence sequenceName="hibernate_sequence" startValue="10" />
 		<createTable tableName="hotel">
 			<column name="id" type="bigint" autoIncrement="${autoIncrement}">
 				<constraints primaryKey="true" nullable="false" />
@@ -40,10 +39,7 @@
 			</column>
 		</createTable>
 
-		<addForeignKeyConstraint baseColumnNames="hotel_id"
-								 baseTableName="booking"
-								 constraintName="fk_booking_hotel_id"
-								 referencedColumnNames="id"
-								 referencedTableName="hotel" />
+		<addForeignKeyConstraint baseColumnNames="hotel_id" baseTableName="booking" constraintName="fk_booking_hotel_id"
+			referencedColumnNames="id" referencedTableName="hotel" />
 	</changeSet>
 </databaseChangeLog>
