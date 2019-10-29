@@ -2,6 +2,7 @@ package com.kalogirou.anixe.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -51,4 +52,18 @@ public class HotelResourceIT {
 		assertThat(databaseSizeAfterCreation).isEqualTo(databaseSizeBeforeCreation + 1);
 	}
 
+	@Test
+	@Transactional
+	public void createHotelWithExistingId() throws Exception {
+		int databaseSizeBeforeCreation = hotelRepository.findAll().size();
+		hotel.setId(1L);
+		this.mockMvc.perform(post("/api/hotels")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(TestUtil.convertObjectToJsonBytes(hotel)))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().string("A new hotel cannot already have an id"));
+
+		int databaseSizeAfterCreation = hotelRepository.findAll().size();
+		assertThat(databaseSizeAfterCreation).isEqualTo(databaseSizeBeforeCreation);
+	}
 }
