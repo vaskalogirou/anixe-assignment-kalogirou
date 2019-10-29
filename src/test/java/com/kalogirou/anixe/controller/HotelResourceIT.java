@@ -42,7 +42,7 @@ public class HotelResourceIT {
 		hotel.setStarRating(DUMMY_RATING);
 
 		final HotelResource hotelResource = new HotelResource(hotelRepository);
-		this.mockMvc = MockMvcBuilders.standaloneSetup(hotelResource).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(hotelResource).build();
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class HotelResourceIT {
 	public void createHotelWithExistingId() throws Exception {
 		int databaseSizeBeforeCreation = hotelRepository.findAll().size();
 		hotel.setId(1L);
-		this.mockMvc.perform(post("/api/hotels")
+		mockMvc.perform(post("/api/hotels")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(TestUtil.convertObjectToJsonBytes(hotel)))
 				.andExpect(status().isBadRequest())
@@ -78,7 +78,7 @@ public class HotelResourceIT {
 	public void checkNameIsShouldNotBeBlank() throws Exception {
 		int databaseSizeBeforeCreation = hotelRepository.findAll().size();
 		hotel.setName("   ");
-		this.mockMvc.perform(post("/api/hotels")
+		mockMvc.perform(post("/api/hotels")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(TestUtil.convertObjectToJsonBytes(hotel)))
 				.andExpect(status().isBadRequest());
@@ -92,7 +92,7 @@ public class HotelResourceIT {
 	public void checkAddressShouldBeAtLeastThreeChars() throws Exception {
 		int databaseSizeBeforeCreation = hotelRepository.findAll().size();
 		hotel.setAddress("GR");
-		this.mockMvc.perform(post("/api/hotels")
+		mockMvc.perform(post("/api/hotels")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(TestUtil.convertObjectToJsonBytes(hotel)))
 				.andExpect(status().isBadRequest());
@@ -105,11 +105,30 @@ public class HotelResourceIT {
 	@Transactional
 	public void getAllHotels() throws Exception {
 		hotelRepository.saveAndFlush(hotel);
-		this.mockMvc.perform(get("/api/hotels"))
+		mockMvc.perform(get("/api/hotels"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.[*].id").value(hasItem(hotel.getId().intValue())))
 				.andExpect(jsonPath("$.[*].name").value(hasItem(DUMMY_NAME)))
 				.andExpect(jsonPath("$.[*].address").value(hasItem(DUMMY_ADDRESS)));
+	}
+
+	@Test
+	@Transactional
+	public void getHotel() throws Exception {
+		hotelRepository.saveAndFlush(hotel);
+		mockMvc.perform(get("/api/hotels/{id}", hotel.getId()))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.id").value(hotel.getId().intValue()))
+				.andExpect(jsonPath("$.name").value(DUMMY_NAME))
+				.andExpect(jsonPath("$.address").value(DUMMY_ADDRESS))
+				.andExpect(jsonPath("$.starRating").value(DUMMY_RATING));
+	}
+
+	@Test
+	@Transactional
+	public void getNonExistingHotel() throws Exception {
+		mockMvc.perform(get("/api/hotels/{id}", Long.MAX_VALUE)).andExpect(status().isNotFound());
 	}
 }
