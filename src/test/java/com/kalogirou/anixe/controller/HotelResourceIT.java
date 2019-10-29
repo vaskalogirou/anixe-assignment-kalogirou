@@ -66,4 +66,32 @@ public class HotelResourceIT {
 		int databaseSizeAfterCreation = hotelRepository.findAll().size();
 		assertThat(databaseSizeAfterCreation).isEqualTo(databaseSizeBeforeCreation);
 	}
+
+	@Test
+	@Transactional
+	public void checkNameIsShouldNotBeBlank() throws Exception {
+		int databaseSizeBeforeCreation = hotelRepository.findAll().size();
+		hotel.setName("   ");
+		this.mockMvc.perform(post("/api/hotels")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(TestUtil.convertObjectToJsonBytes(hotel)))
+				.andExpect(status().isBadRequest());
+
+		int databaseSizeAfterCreation = hotelRepository.findAll().size();
+		assertThat(databaseSizeAfterCreation).isEqualTo(databaseSizeBeforeCreation);
+	}
+
+	@Test
+	@Transactional
+	public void checkAddressShouldBeAtLeastThreeChars() throws Exception {
+		int databaseSizeBeforeCreation = hotelRepository.findAll().size();
+		hotel.setAddress("GR");
+		this.mockMvc.perform(post("/api/hotels")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(TestUtil.convertObjectToJsonBytes(hotel)))
+				.andExpect(status().isBadRequest());
+
+		int databaseSizeAfterCreation = hotelRepository.findAll().size();
+		assertThat(databaseSizeAfterCreation).isEqualTo(databaseSizeBeforeCreation);
+	}
 }

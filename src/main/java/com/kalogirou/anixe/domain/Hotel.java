@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Hotel implements Serializable {
@@ -13,8 +15,13 @@ public class Hotel implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@NotBlank
 	private String name;
+
+	@NotBlank
+	@Size(min = 3)
 	private String address;
+
 	private Float starRating;
 
 	public Long getId() {
