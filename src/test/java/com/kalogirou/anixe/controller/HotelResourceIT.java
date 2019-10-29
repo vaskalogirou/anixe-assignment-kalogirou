@@ -1,8 +1,11 @@
 package com.kalogirou.anixe.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +23,9 @@ import com.kalogirou.anixe.repository.HotelRepository;
 
 @SpringBootTest(classes = AnixeAssignmentKalogirouApplication.class)
 public class HotelResourceIT {
+	private static final String DUMMY_NAME = "dummy hotel name";
+	private static final String DUMMY_ADDRESS = "Syntagma Square";
+	private static final float DUMMY_RATING = 8.3f;
 
 	@Autowired
 	private HotelRepository hotelRepository;
@@ -31,9 +37,9 @@ public class HotelResourceIT {
 	@BeforeEach
 	public void setup() {
 		hotel = new Hotel();
-		hotel.setName("dummy hotel");
-		hotel.setAddress("Syntagma Square");
-		hotel.setStarRating(8.3f);
+		hotel.setName(DUMMY_NAME);
+		hotel.setAddress(DUMMY_ADDRESS);
+		hotel.setStarRating(DUMMY_RATING);
 
 		final HotelResource hotelResource = new HotelResource(hotelRepository);
 		this.mockMvc = MockMvcBuilders.standaloneSetup(hotelResource).build();
@@ -93,5 +99,17 @@ public class HotelResourceIT {
 
 		int databaseSizeAfterCreation = hotelRepository.findAll().size();
 		assertThat(databaseSizeAfterCreation).isEqualTo(databaseSizeBeforeCreation);
+	}
+
+	@Test
+	@Transactional
+	public void getAllHotels() throws Exception {
+		hotelRepository.saveAndFlush(hotel);
+		this.mockMvc.perform(get("/api/hotels"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.[*].id").value(hasItem(hotel.getId().intValue())))
+				.andExpect(jsonPath("$.[*].name").value(hasItem(DUMMY_NAME)))
+				.andExpect(jsonPath("$.[*].address").value(hasItem(DUMMY_ADDRESS)));
 	}
 }
