@@ -35,7 +35,7 @@ public class BookingRepositoryIntTest {
 		booking = new Booking();
 		booking.setCustomerName("john");
 		booking.setCustomerSurname("doe");
-		booking.setCurrency("EUR");
+		booking.setCurrency(Currency.EUR);
 		booking.setNumberOfPax(2);
 		booking.setPriceAmount(100f);
 		booking.setCurrentRateToEuro(CurrencyUtils.getRates().get(Currency.EUR));

@@ -3,10 +3,16 @@ package com.kalogirou.anixe.domain;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import com.kalogirou.anixe.helper.Currency;
 
 @Entity
 public class Booking implements Serializable {
@@ -14,15 +20,27 @@ public class Booking implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@NotBlank
 	private String customerName;
+
+	@NotBlank
 	private String customerSurname;
+
+	@NotNull
 	private Integer numberOfPax;
 
+	@NotNull
 	@ManyToOne
 	private Hotel hotel;
 
+	@NotNull
 	private Float priceAmount;
-	private String currency;
+
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private Currency currency;
+
+	@NotNull
 	private Float currentRateToEuro;
 
 	public Long getId() {
@@ -73,14 +91,6 @@ public class Booking implements Serializable {
 		this.priceAmount = priceAmount;
 	}
 
-	public String getCurrency() {
-		return currency;
-	}
-
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
-
 	public Float getCurrentRateToEuro() {
 		return currentRateToEuro;
 	}
@@ -88,4 +98,13 @@ public class Booking implements Serializable {
 	public void setCurrentRateToEuro(Float currentRateToEuro) {
 		this.currentRateToEuro = currentRateToEuro;
 	}
+
+	public Currency getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
+	}
+
 }
