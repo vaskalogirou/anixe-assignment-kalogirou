@@ -14,7 +14,7 @@ import com.kalogirou.anixe.AnixeAssignmentKalogirouApplication;
 import com.kalogirou.anixe.domain.Hotel;
 
 @SpringBootTest(classes = AnixeAssignmentKalogirouApplication.class)
-public class HotelRepositoryIT {
+public class HotelRepositoryIntTest {
 	@Autowired
 	private HotelRepository hotelRepository;
 

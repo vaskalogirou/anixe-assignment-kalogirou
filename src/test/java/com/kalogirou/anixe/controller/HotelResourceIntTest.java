@@ -24,7 +24,7 @@ import com.kalogirou.anixe.domain.Hotel;
 import com.kalogirou.anixe.repository.HotelRepository;
 
 @SpringBootTest(classes = AnixeAssignmentKalogirouApplication.class)
-public class HotelResourceIT {
+public class HotelResourceIntTest {
 	private static final String DUMMY_NAME = "dummy hotel name";
 	private static final String DUMMY_ADDRESS = "Syntagma Square";
 	private static final float DUMMY_RATING = 8.3f;
