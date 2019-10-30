@@ -33,13 +33,12 @@ public class HotelResource {
 		if (hotel.getId() != null) {
 			return ResponseEntity.badRequest().body("A new hotel cannot already have an id");
 		}
-		Hotel result = hotelRepository.save(hotel);
-		return ResponseEntity.status(HttpStatus.CREATED).body(result);
+		hotelRepository.save(hotel);
+		return ResponseEntity.status(HttpStatus.CREATED).body(hotel);
 	}
 
 	@GetMapping("/hotels")
 	public List<Hotel> getAllHotels() {
-		System.out.println("I got called!");
 		List<Hotel> hotels = hotelRepository.findAll();
 		return hotels;
 	}
