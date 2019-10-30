@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,5 +58,14 @@ public class HotelResource {
 	public ResponseEntity<Void> deleteHotel(@PathVariable Long id) {
 		hotelRepository.deleteById(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	@PutMapping("/hotels")
+	public ResponseEntity<?> updateHotel(@Valid @RequestBody Hotel hotel) {
+		if (hotel.getId() == null) {
+			return ResponseEntity.badRequest().body("Request to update a hotel should have a hotel id");
+		}
+		hotelRepository.save(hotel);
+		return ResponseEntity.ok().body(hotel);
 	}
 }

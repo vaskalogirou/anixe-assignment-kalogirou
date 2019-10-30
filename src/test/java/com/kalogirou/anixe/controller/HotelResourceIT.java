@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -142,5 +143,32 @@ public class HotelResourceIT {
 
 		int databaseSizeAfterDeletion = hotelRepository.findAll().size();
 		assertThat(databaseSizeAfterDeletion).isEqualTo(databaseSizeBeforeDeletion - 1);
+	}
+
+	@Test
+	@Transactional
+	public void updateHotel() throws Exception {
+		hotelRepository.saveAndFlush(hotel);
+		String updatedName = "another dummy name";
+		String updatedAddress = "Omonoia square";
+		Float updatedRating = 9.3f;
+
+		int databaseSizeBeforeUpdating = hotelRepository.findAll().size();
+		hotel.setName(updatedName);
+		hotel.setAddress(updatedAddress);
+		hotel.setStarRating(updatedRating);
+
+		mockMvc.perform(put("/api/hotels")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(TestUtil.convertObjectToJsonBytes(hotel)))
+				.andExpect(status().isOk());
+
+		int databaseSizeAfterUpdating = hotelRepository.findAll().size();
+		assertThat(databaseSizeAfterUpdating).isEqualTo(databaseSizeBeforeUpdating);
+
+		Hotel updatedHotel = hotelRepository.findById(hotel.getId()).get();
+		assertThat(updatedHotel.getName()).isEqualTo(updatedName);
+		assertThat(updatedHotel.getAddress()).isEqualTo(updatedAddress);
+		assertThat(updatedHotel.getStarRating()).isEqualTo(updatedRating);
 	}
 }
