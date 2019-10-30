@@ -2,6 +2,7 @@ package com.kalogirou.anixe.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -75,7 +76,7 @@ public class HotelResourceIT {
 
 	@Test
 	@Transactional
-	public void checkNameIsShouldNotBeBlank() throws Exception {
+	public void checkNameShouldNotBeBlank() throws Exception {
 		int databaseSizeBeforeCreation = hotelRepository.findAll().size();
 		hotel.setName("   ");
 		mockMvc.perform(post("/api/hotels")
@@ -130,5 +131,16 @@ public class HotelResourceIT {
 	@Transactional
 	public void getNonExistingHotel() throws Exception {
 		mockMvc.perform(get("/api/hotels/{id}", Long.MAX_VALUE)).andExpect(status().isNotFound());
+	}
+
+	@Test
+	@Transactional
+	public void deleteHotel() throws Exception {
+		hotelRepository.saveAndFlush(hotel);
+		int databaseSizeBeforeDeletion = hotelRepository.findAll().size();
+		mockMvc.perform(delete("/api/hotels/{id}", hotel.getId())).andExpect(status().isNoContent());
+
+		int databaseSizeAfterDeletion = hotelRepository.findAll().size();
+		assertThat(databaseSizeAfterDeletion).isEqualTo(databaseSizeBeforeDeletion - 1);
 	}
 }
