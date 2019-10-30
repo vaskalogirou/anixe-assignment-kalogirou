@@ -12,7 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@SpringBootTest
+import com.kalogirou.anixe.AnixeAssignmentKalogirouApplication;
+
+@SpringBootTest(classes = AnixeAssignmentKalogirouApplication.class)
 public class HelloControllerTest {
 
 	private MockMvc mockMvc;
