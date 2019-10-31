@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -137,5 +138,47 @@ public class BookingResourceIntTest {
 
 		int databaseSizeAfterDeletion = bookingRepository.findAll().size();
 		assertThat(databaseSizeAfterDeletion).isEqualTo(databaseSizeBeforeDeletion - 1);
+	}
+
+	@Test
+	@Transactional
+	public void updateBooking() throws Exception {
+		bookingRepository.saveAndFlush(booking);
+		String updatedCustomerName = "Michael";
+		String updatedCustomerSurname = "Jackson";
+		Integer updatedNumberOfPax = 4;
+		Float updatedPriceAmount = 200f;
+		Currency updatedCurrency = Currency.USD;
+
+		Hotel updatedHotel = new Hotel();
+		updatedHotel.setName("another hotel");
+		updatedHotel.setAddress("down town");
+		hotelRepository.save(updatedHotel);
+
+		booking.setCustomerName(updatedCustomerName);
+		booking.setCustomerSurname(updatedCustomerSurname);
+		booking.setNumberOfPax(updatedNumberOfPax);
+		booking.setPriceAmount(updatedPriceAmount);
+		booking.setCurrency(updatedCurrency);
+		booking.setHotel(updatedHotel);
+
+		int databaseSizeBeforeUpdating = bookingRepository.findAll().size();
+
+		mockMvc.perform(put("/api/bookings")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(TestUtil.convertObjectToJsonBytes(booking)))
+				.andExpect(status().isOk());
+
+		int databaseSizeAfterUpdating = bookingRepository.findAll().size();
+		assertThat(databaseSizeAfterUpdating).isEqualTo(databaseSizeBeforeUpdating);
+
+		Booking updatedBooking = bookingRepository.findById(booking.getId()).get();
+		assertThat(updatedBooking.getCustomerName()).isEqualTo(updatedCustomerName);
+		assertThat(updatedBooking.getCustomerSurname()).isEqualTo(updatedCustomerSurname);
+		assertThat(updatedBooking.getNumberOfPax()).isEqualTo(updatedNumberOfPax);
+		assertThat(updatedBooking.getPriceAmount()).isEqualTo(updatedPriceAmount);
+		assertThat(updatedBooking.getCurrency()).isEqualTo(updatedCurrency);
+		assertThat(updatedBooking.getHotel().getId()).isEqualTo(updatedHotel.getId());
+
 	}
 }
