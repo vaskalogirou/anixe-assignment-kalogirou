@@ -17,16 +17,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kalogirou.anixe.domain.Booking;
-import com.kalogirou.anixe.helper.CurrencyUtils;
 import com.kalogirou.anixe.repository.BookingRepository;
+import com.kalogirou.anixe.service.BookingService;
 
 @RestController
 @RequestMapping("/api")
 public class BookingController {
 	private final BookingRepository bookingRepository;
 
-	public BookingController(BookingRepository bookingRepository) {
+	private final BookingService bookingService;
+
+	public BookingController(BookingRepository bookingRepository, BookingService bookingService) {
 		this.bookingRepository = bookingRepository;
+		this.bookingService = bookingService;
 	}
 
 	@PostMapping("/bookings")
@@ -34,8 +37,7 @@ public class BookingController {
 		if (booking.getId() != null) {
 			return ResponseEntity.badRequest().body("A new booking cannot already have an id");
 		}
-		booking.setExchangeRateToEuro(CurrencyUtils.getRates().get(booking.getCurrency()));
-		bookingRepository.save(booking);
+		bookingService.save(booking);
 		return ResponseEntity.status(HttpStatus.CREATED).body(booking);
 	}
 

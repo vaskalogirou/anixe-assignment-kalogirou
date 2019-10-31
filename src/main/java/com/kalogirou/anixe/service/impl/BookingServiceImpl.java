@@ -5,10 +5,21 @@ import org.springframework.stereotype.Service;
 import com.kalogirou.anixe.domain.Booking;
 import com.kalogirou.anixe.helper.Currency;
 import com.kalogirou.anixe.helper.CurrencyUtils;
+import com.kalogirou.anixe.repository.BookingRepository;
+import com.kalogirou.anixe.repository.CurrencyRepository;
 import com.kalogirou.anixe.service.BookingService;
 
 @Service
 public class BookingServiceImpl implements BookingService {
+
+	private CurrencyRepository currencyRepository;
+
+	private BookingRepository bookingRepository;
+
+	public BookingServiceImpl(CurrencyRepository currencyRepository, BookingRepository bookingRepository) {
+		this.currencyRepository = currencyRepository;
+		this.bookingRepository = bookingRepository;
+	}
 
 	@Override
 	public Float calculatePriceAmountInEuro(Booking booking) {
@@ -18,5 +29,12 @@ public class BookingServiceImpl implements BookingService {
 
 		Float rate = bookingRate != null ? bookingRate : CurrencyUtils.getRates().get(currency);
 		return priceAmount / rate;
+	}
+
+	@Override
+	public Booking save(Booking booking) {
+		booking.setExchangeRateToEuro(currencyRepository.getRates().get(booking.getCurrency()));
+		bookingRepository.save(booking);
+		return booking;
 	}
 }

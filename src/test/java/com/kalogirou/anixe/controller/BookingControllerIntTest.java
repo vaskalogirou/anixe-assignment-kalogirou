@@ -26,6 +26,7 @@ import com.kalogirou.anixe.fixture.Fixtures;
 import com.kalogirou.anixe.helper.Currency;
 import com.kalogirou.anixe.repository.BookingRepository;
 import com.kalogirou.anixe.repository.HotelRepository;
+import com.kalogirou.anixe.service.BookingService;
 
 @SpringBootTest(classes = AnixeAssignmentKalogirouApplication.class)
 public class BookingControllerIntTest {
@@ -33,6 +34,9 @@ public class BookingControllerIntTest {
 
 	@Autowired
 	private BookingRepository bookingRepository;
+
+	@Autowired
+	private BookingService bookingService;
 
 	@Autowired
 	private HotelRepository hotelRepository;
@@ -47,7 +51,7 @@ public class BookingControllerIntTest {
 		booking = Fixtures.dummyBooking();
 		booking.setHotel(hotel);
 
-		final BookingController bookingResource = new BookingController(bookingRepository);
+		final BookingController bookingResource = new BookingController(bookingRepository, bookingService);
 		mockMvc = MockMvcBuilders.standaloneSetup(bookingResource).build();
 	}
 
