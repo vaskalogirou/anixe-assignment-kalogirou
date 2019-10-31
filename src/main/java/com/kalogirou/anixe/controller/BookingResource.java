@@ -1,6 +1,7 @@
 package com.kalogirou.anixe.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -41,6 +42,15 @@ public class BookingResource {
 	public List<Booking> getAllBookings() {
 		List<Booking> bookings = bookingRepository.findAll();
 		return bookings;
+	}
+
+	@GetMapping("bookings/{id}")
+	public ResponseEntity<?> getBooking(@PathVariable Long id) {
+		Optional<Booking> booking = bookingRepository.findById(id);
+		if (booking.isPresent()) {
+			return ResponseEntity.ok(booking.get());
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 	@DeleteMapping("/bookings/{id}")

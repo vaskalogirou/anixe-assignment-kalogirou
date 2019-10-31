@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +27,9 @@ import com.kalogirou.anixe.repository.HotelRepository;
 
 @SpringBootTest(classes = AnixeAssignmentKalogirouApplication.class)
 public class BookingResourceIntTest {
+	private static final String CUSTOMER_NAME = "john";
+	private static final String CUSTOMER_SURNAME = "doe";
+	private static final String HOTEL_NAME = "dummy hotel name";
 	private MockMvc mockMvc;
 
 	@Autowired
@@ -39,14 +43,14 @@ public class BookingResourceIntTest {
 	@BeforeEach
 	public void setup() {
 		Hotel hotel = new Hotel();
-		hotel.setName("dummy hotel");
+		hotel.setName(HOTEL_NAME);
 		hotel.setAddress("dummy address");
 		hotel.setStarRating(7.5f);
 		hotelRepository.save(hotel);
 
 		booking = new Booking();
-		booking.setCustomerName("john");
-		booking.setCustomerSurname("doe");
+		booking.setCustomerName(CUSTOMER_NAME);
+		booking.setCustomerSurname(CUSTOMER_SURNAME);
 		booking.setCurrency(Currency.EUR);
 		booking.setNumberOfPax(2);
 		booking.setPriceAmount(100f);
@@ -102,6 +106,26 @@ public class BookingResourceIntTest {
 	@Transactional
 	public void getAllBookings() throws Exception {
 		mockMvc.perform(get("/api/bookings")).andExpect(status().isOk());
+	}
+
+	@Test
+	@Transactional
+	public void getBooking() throws Exception {
+		bookingRepository.saveAndFlush(booking);
+		mockMvc.perform(get("/api/bookings/{id}", booking.getId()))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.id").value(booking.getId().intValue()))
+				.andExpect(jsonPath("$.customerName").value(CUSTOMER_NAME))
+				.andExpect(jsonPath("$.customerSurname").value(CUSTOMER_SURNAME))
+				.andExpect(jsonPath("$.currency").value("EUR"))
+				.andExpect(jsonPath("$.hotel.name").value(HOTEL_NAME));
+	}
+
+	@Test
+	@Transactional
+	public void getNonExistingBooking() throws Exception {
+		mockMvc.perform(get("/api/bookings/{id}", Long.MAX_VALUE)).andExpect(status().isNotFound());
 	}
 
 	@Test
