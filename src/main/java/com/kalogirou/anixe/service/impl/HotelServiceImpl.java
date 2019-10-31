@@ -23,7 +23,7 @@ public class HotelServiceImpl implements HotelService {
 		Float sum = 0f;
 		for (Booking booking : bookings) {
 			float rate = 1;
-			if (booking.getCurrentRateToEuro() != null) {
+			if (booking.getExchangeRateToEuro() != null) {
 			}
 		}
 		return null;

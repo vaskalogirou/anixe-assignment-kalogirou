@@ -1,4 +1,4 @@
-id;customer_name;customer_surname;number_of_pax;hotel_id;price_amount;currency;current_rate_to_euro
+id;customer_name;customer_surname;number_of_pax;hotel_id;price_amount;currency;exchange_rate_to_euro
 1;John;Doe;2;1;200;EUR;1
 2;Michael;Jackson;1;1;100;USD;1.11
 3;Leo;Tolstoy;5;1;50000;RUB;70.82

@@ -40,7 +40,7 @@ public class Booking implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
 
-	private Float currentRateToEuro;
+	private Float exchangeRateToEuro;
 
 	public Long getId() {
 		return id;
@@ -90,20 +90,20 @@ public class Booking implements Serializable {
 		this.priceAmount = priceAmount;
 	}
 
-	public Float getCurrentRateToEuro() {
-		return currentRateToEuro;
-	}
-
-	public void setCurrentRateToEuro(Float currentRateToEuro) {
-		this.currentRateToEuro = currentRateToEuro;
-	}
-
 	public Currency getCurrency() {
 		return currency;
 	}
 
 	public void setCurrency(Currency currency) {
 		this.currency = currency;
+	}
+
+	public Float getExchangeRateToEuro() {
+		return exchangeRateToEuro;
+	}
+
+	public void setExchangeRateToEuro(Float exchangeRateToEuro) {
+		this.exchangeRateToEuro = exchangeRateToEuro;
 	}
 
 }

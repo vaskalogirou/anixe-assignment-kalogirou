@@ -12,7 +12,7 @@
 			<column name="currency" type="varchar(3)">
 				<constraints nullable="false" />
 			</column>
-			<column name="current_rate_to_euro" type="decimal(8,4)" />
+			<column name="exchange_rate_to_euro" type="decimal(8,4)" />
 		</addColumn>
 	</changeSet>
 </databaseChangeLog>

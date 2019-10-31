@@ -34,7 +34,7 @@ public class BookingController {
 		if (booking.getId() != null) {
 			return ResponseEntity.badRequest().body("A new booking cannot already have an id");
 		}
-		booking.setCurrentRateToEuro(CurrencyUtils.getRates().get(booking.getCurrency()));
+		booking.setExchangeRateToEuro(CurrencyUtils.getRates().get(booking.getCurrency()));
 		bookingRepository.save(booking);
 		return ResponseEntity.status(HttpStatus.CREATED).body(booking);
 	}
