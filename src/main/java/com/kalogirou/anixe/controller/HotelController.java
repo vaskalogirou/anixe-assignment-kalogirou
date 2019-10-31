@@ -18,14 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kalogirou.anixe.domain.Hotel;
 import com.kalogirou.anixe.repository.HotelRepository;
+import com.kalogirou.anixe.service.HotelService;
 
 @RestController
 @RequestMapping("/api")
 public class HotelController {
 	private final HotelRepository hotelRepository;
 
-	public HotelController(HotelRepository hotelRepository) {
+	private final HotelService hotelService;
+
+	public HotelController(HotelRepository hotelRepository, HotelService hotelService) {
 		this.hotelRepository = hotelRepository;
+		this.hotelService = hotelService;
 	}
 
 	@PostMapping("/hotels")
@@ -66,5 +70,11 @@ public class HotelController {
 		}
 		hotelRepository.save(hotel);
 		return ResponseEntity.ok().body(hotel);
+	}
+
+	@GetMapping("/hotels/{id}/price-amount-sum-in-euro")
+	public ResponseEntity<Float> getSumOfPriceAmountsByHotelId(@PathVariable Long id) {
+		float sum = hotelService.calculateSumOfPriceAmountsInEuroByHotelId(id);
+		return ResponseEntity.ok(sum);
 	}
 }

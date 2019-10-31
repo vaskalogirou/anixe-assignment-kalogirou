@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.kalogirou.anixe.domain.Booking;
 import com.kalogirou.anixe.repository.BookingRepository;
+import com.kalogirou.anixe.service.BookingService;
 import com.kalogirou.anixe.service.HotelService;
 
 @Service
@@ -13,19 +14,21 @@ public class HotelServiceImpl implements HotelService {
 
 	private BookingRepository bookingRepository;
 
-	public HotelServiceImpl(BookingRepository bookingRepository) {
+	private BookingService bookingService;
+
+	public HotelServiceImpl(BookingRepository bookingRepository, BookingService bookingService) {
 		this.bookingRepository = bookingRepository;
+		this.bookingService = bookingService;
 	}
 
 	@Override
-	public Float calculateSumOfPriceAmountsInEuroByHotelId(Long id) {
+	public float calculateSumOfPriceAmountsInEuroByHotelId(Long id) {
 		List<Booking> bookings = bookingRepository.findAllByHotelId(id);
-		Float sum = 0f;
+		float sum = 0f;
 		for (Booking booking : bookings) {
-			float rate = 1;
-			if (booking.getExchangeRateToEuro() != null) {
-			}
+			float priceAmountInEuro = bookingService.calculatePriceAmountInEuro(booking);
+			sum += priceAmountInEuro;
 		}
-		return null;
+		return sum;
 	}
 }
