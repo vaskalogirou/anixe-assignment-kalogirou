@@ -1,6 +1,7 @@
 package com.kalogirou.anixe.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -101,5 +102,16 @@ public class BookingResourceIntTest {
 	@Transactional
 	public void getAllBookings() throws Exception {
 		mockMvc.perform(get("/api/bookings")).andExpect(status().isOk());
+	}
+
+	@Test
+	@Transactional
+	public void deleteBooking() throws Exception {
+		bookingRepository.saveAndFlush(booking);
+		int databaseSizeBeforeDeletion = bookingRepository.findAll().size();
+		mockMvc.perform(delete("/api/bookings/{id}", booking.getId())).andExpect(status().isNoContent());
+
+		int databaseSizeAfterDeletion = bookingRepository.findAll().size();
+		assertThat(databaseSizeAfterDeletion).isEqualTo(databaseSizeBeforeDeletion - 1);
 	}
 }
