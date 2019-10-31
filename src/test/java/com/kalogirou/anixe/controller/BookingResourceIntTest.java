@@ -22,15 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kalogirou.anixe.AnixeAssignmentKalogirouApplication;
 import com.kalogirou.anixe.domain.Booking;
 import com.kalogirou.anixe.domain.Hotel;
+import com.kalogirou.anixe.fixture.Fixtures;
 import com.kalogirou.anixe.helper.Currency;
 import com.kalogirou.anixe.repository.BookingRepository;
 import com.kalogirou.anixe.repository.HotelRepository;
 
 @SpringBootTest(classes = AnixeAssignmentKalogirouApplication.class)
 public class BookingResourceIntTest {
-	private static final String CUSTOMER_NAME = "john";
-	private static final String CUSTOMER_SURNAME = "doe";
-	private static final String HOTEL_NAME = "dummy hotel name";
 	private MockMvc mockMvc;
 
 	@Autowired
@@ -43,18 +41,10 @@ public class BookingResourceIntTest {
 
 	@BeforeEach
 	public void setup() {
-		Hotel hotel = new Hotel();
-		hotel.setName(HOTEL_NAME);
-		hotel.setAddress("dummy address");
-		hotel.setStarRating(7.5f);
+		Hotel hotel = Fixtures.dummyHotel();
 		hotelRepository.save(hotel);
 
-		booking = new Booking();
-		booking.setCustomerName(CUSTOMER_NAME);
-		booking.setCustomerSurname(CUSTOMER_SURNAME);
-		booking.setCurrency(Currency.EUR);
-		booking.setNumberOfPax(2);
-		booking.setPriceAmount(100f);
+		booking = Fixtures.dummyBooking();
 		booking.setHotel(hotel);
 
 		final BookingResource bookingResource = new BookingResource(bookingRepository);
@@ -117,10 +107,10 @@ public class BookingResourceIntTest {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.id").value(booking.getId().intValue()))
-				.andExpect(jsonPath("$.customerName").value(CUSTOMER_NAME))
-				.andExpect(jsonPath("$.customerSurname").value(CUSTOMER_SURNAME))
-				.andExpect(jsonPath("$.currency").value("EUR"))
-				.andExpect(jsonPath("$.hotel.name").value(HOTEL_NAME));
+				.andExpect(jsonPath("$.customerName").value(Fixtures.DUMMY_CUSTOMER_NAME))
+				.andExpect(jsonPath("$.customerSurname").value(Fixtures.DUMMY_CUSTOMER_SURNAME))
+				.andExpect(jsonPath("$.currency").value(Fixtures.DUMMY_CURRENCY.toString()))
+				.andExpect(jsonPath("$.hotel.name").value(Fixtures.DUMMY_HOTEL_NAME));
 	}
 
 	@Test
@@ -179,6 +169,5 @@ public class BookingResourceIntTest {
 		assertThat(updatedBooking.getPriceAmount()).isEqualTo(updatedPriceAmount);
 		assertThat(updatedBooking.getCurrency()).isEqualTo(updatedCurrency);
 		assertThat(updatedBooking.getHotel().getId()).isEqualTo(updatedHotel.getId());
-
 	}
 }

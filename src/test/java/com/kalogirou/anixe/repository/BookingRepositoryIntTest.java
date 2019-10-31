@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kalogirou.anixe.AnixeAssignmentKalogirouApplication;
 import com.kalogirou.anixe.domain.Booking;
 import com.kalogirou.anixe.domain.Hotel;
+import com.kalogirou.anixe.fixture.Fixtures;
 import com.kalogirou.anixe.helper.Currency;
 import com.kalogirou.anixe.helper.CurrencyUtils;
 
@@ -30,18 +31,10 @@ public class BookingRepositoryIntTest {
 
 	@BeforeEach
 	public void setup() {
-		Hotel hotel = new Hotel();
-		hotel.setName("dummy hotel");
-		hotel.setAddress("dummy address");
-		hotel.setStarRating(7.5f);
+		Hotel hotel = Fixtures.dummyHotel();
 		hotelRepository.save(hotel);
 
-		booking = new Booking();
-		booking.setCustomerName("john");
-		booking.setCustomerSurname("doe");
-		booking.setCurrency(Currency.EUR);
-		booking.setNumberOfPax(2);
-		booking.setPriceAmount(100f);
+		booking = Fixtures.dummyBooking();
 		booking.setCurrentRateToEuro(CurrencyUtils.getRates().get(Currency.EUR));
 		booking.setHotel(hotel);
 	}
