@@ -40,7 +40,6 @@ public class Booking implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
 
-	@NotNull
 	private Float currentRateToEuro;
 
 	public Long getId() {

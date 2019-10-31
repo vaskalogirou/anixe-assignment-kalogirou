@@ -77,7 +77,7 @@ public class HotelResourceIntTest {
 
 	@Test
 	@Transactional
-	public void checkNameShouldNotBeBlank() throws Exception {
+	public void createHotelCheckNameIsNotBeBlank() throws Exception {
 		int databaseSizeBeforeCreation = hotelRepository.findAll().size();
 		hotel.setName("   ");
 		mockMvc.perform(post("/api/hotels")
@@ -91,7 +91,7 @@ public class HotelResourceIntTest {
 
 	@Test
 	@Transactional
-	public void checkAddressShouldBeAtLeastThreeChars() throws Exception {
+	public void createHotelAddressShouldBeAtLeastThreeChars() throws Exception {
 		int databaseSizeBeforeCreation = hotelRepository.findAll().size();
 		hotel.setAddress("GR");
 		mockMvc.perform(post("/api/hotels")

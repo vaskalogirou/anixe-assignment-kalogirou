@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,6 @@ import com.kalogirou.anixe.AnixeAssignmentKalogirouApplication;
 import com.kalogirou.anixe.domain.Booking;
 import com.kalogirou.anixe.domain.Hotel;
 import com.kalogirou.anixe.helper.Currency;
-import com.kalogirou.anixe.helper.CurrencyUtils;
 import com.kalogirou.anixe.repository.BookingRepository;
 import com.kalogirou.anixe.repository.HotelRepository;
 
@@ -49,7 +49,6 @@ public class BookingResourceIntTest {
 		booking.setCurrency(Currency.EUR);
 		booking.setNumberOfPax(2);
 		booking.setPriceAmount(100f);
-		booking.setCurrentRateToEuro(CurrencyUtils.getRates().get(Currency.EUR));
 		booking.setHotel(hotel);
 
 		final BookingResource bookingResource = new BookingResource(bookingRepository);
@@ -82,6 +81,20 @@ public class BookingResourceIntTest {
 
 		int databaseSizeAfterCreation = bookingRepository.findAll().size();
 		assertThat(databaseSizeAfterCreation).isEqualTo(databaseSizeBeforeCreation);
+	}
+
+	@Test
+	@Transactional
+	public void createBookingCheckCustomerNameIsNotBlank() throws Exception {
+		booking.setCustomerName("	 ");
+		MvcResult mvcResult = mockMvc.perform(post("/api/bookings")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(TestUtil.convertObjectToJsonBytes(booking)))
+				.andExpect(status().isBadRequest())
+				.andReturn();
+
+		String response = mvcResult.getResolvedException().getMessage();
+		assertThat(response).contains("Field error in object 'booking' on field 'customerName': rejected value");
 	}
 
 	@Test

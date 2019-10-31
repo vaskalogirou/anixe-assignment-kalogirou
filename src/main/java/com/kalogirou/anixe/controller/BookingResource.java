@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kalogirou.anixe.domain.Booking;
+import com.kalogirou.anixe.helper.CurrencyUtils;
 import com.kalogirou.anixe.repository.BookingRepository;
 
 @RestController
@@ -29,6 +30,7 @@ public class BookingResource {
 		if (booking.getId() != null) {
 			return ResponseEntity.badRequest().body("A new booking cannot already have an id");
 		}
+		booking.setCurrentRateToEuro(CurrencyUtils.getRates().get(booking.getCurrency()));
 		bookingRepository.save(booking);
 		return ResponseEntity.status(HttpStatus.CREATED).body(booking);
 	}
