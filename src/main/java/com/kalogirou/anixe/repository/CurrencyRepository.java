@@ -9,7 +9,11 @@ import com.kalogirou.anixe.helper.Currency;
 
 @Service
 public class CurrencyRepository {
-	public Map<Currency, Float> getRates() {
+	public Float getRate(Currency currency) {
+		return getRates().get(currency);
+	}
+
+	private Map<Currency, Float> getRates() {
 		Map<Currency, Float> rates = new HashMap<Currency, Float>();
 		rates.put(Currency.EUR, 1f);
 		rates.put(Currency.USD, 1.11f);
@@ -17,9 +21,5 @@ public class CurrencyRepository {
 		rates.put(Currency.GBP, 0.87f);
 		rates.put(Currency.RUB, 70.82f);
 		return rates;
-	}
-
-	public Float getRate(Currency currency) {
-		return getRates().get(currency);
 	}
 }
