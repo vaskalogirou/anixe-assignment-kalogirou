@@ -28,7 +28,7 @@ import com.kalogirou.anixe.repository.BookingRepository;
 import com.kalogirou.anixe.repository.HotelRepository;
 
 @SpringBootTest(classes = AnixeAssignmentKalogirouApplication.class)
-public class BookingResourceIntTest {
+public class BookingControllerIntTest {
 	private MockMvc mockMvc;
 
 	@Autowired
@@ -47,7 +47,7 @@ public class BookingResourceIntTest {
 		booking = Fixtures.dummyBooking();
 		booking.setHotel(hotel);
 
-		final BookingResource bookingResource = new BookingResource(bookingRepository);
+		final BookingController bookingResource = new BookingController(bookingRepository);
 		mockMvc = MockMvcBuilders.standaloneSetup(bookingResource).build();
 	}
 

@@ -21,10 +21,10 @@ import com.kalogirou.anixe.repository.HotelRepository;
 
 @RestController
 @RequestMapping("/api")
-public class HotelResource {
+public class HotelController {
 	private final HotelRepository hotelRepository;
 
-	public HotelResource(HotelRepository hotelRepository) {
+	public HotelController(HotelRepository hotelRepository) {
 		this.hotelRepository = hotelRepository;
 	}
 
