@@ -47,8 +47,8 @@ public class BookingController {
 		return bookings;
 	}
 
-	@GetMapping("bookings/{id}")
-	public ResponseEntity<?> getBooking(@PathVariable Long id) {
+	@GetMapping("/bookings/{id}")
+	public ResponseEntity<?> getBookingById(@PathVariable Long id) {
 		Optional<Booking> booking = bookingRepository.findById(id);
 		if (booking.isPresent()) {
 			return ResponseEntity.ok(booking.get());
@@ -69,5 +69,11 @@ public class BookingController {
 		}
 		bookingRepository.save(booking);
 		return ResponseEntity.ok().body(booking);
+	}
+
+	@GetMapping("/bookings-by-hotel-id/{hotelId}")
+	public ResponseEntity<?> getBookingsByHotelId(@PathVariable Long hotelId) {
+		List<Booking> bookings = bookingRepository.findAllByHotelId(hotelId);
+		return ResponseEntity.ok().body(bookings);
 	}
 }

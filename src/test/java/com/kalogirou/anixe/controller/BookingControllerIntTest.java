@@ -70,7 +70,7 @@ public class BookingControllerIntTest {
 
 	@Test
 	@Transactional
-	public void createBookingWithExistingId() throws Exception {
+	public void createBookingWithExistingIdReturnsBadRequest() throws Exception {
 		booking.setId(1L);
 		int databaseSizeBeforeCreation = bookingRepository.findAll().size();
 		mockMvc.perform(post("/api/bookings")
@@ -105,7 +105,7 @@ public class BookingControllerIntTest {
 
 	@Test
 	@Transactional
-	public void getBooking() throws Exception {
+	public void getBookingById() throws Exception {
 		bookingRepository.saveAndFlush(booking);
 		mockMvc.perform(get("/api/bookings/{id}", booking.getId()))
 				.andExpect(status().isOk())
