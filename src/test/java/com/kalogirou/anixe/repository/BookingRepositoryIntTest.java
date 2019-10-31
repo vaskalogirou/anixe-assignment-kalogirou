@@ -17,7 +17,6 @@ import com.kalogirou.anixe.domain.Booking;
 import com.kalogirou.anixe.domain.Hotel;
 import com.kalogirou.anixe.fixture.Fixtures;
 import com.kalogirou.anixe.helper.Currency;
-import com.kalogirou.anixe.helper.CurrencyUtils;
 
 @SpringBootTest(classes = AnixeAssignmentKalogirouApplication.class)
 public class BookingRepositoryIntTest {
@@ -27,6 +26,9 @@ public class BookingRepositoryIntTest {
 	@Autowired
 	private HotelRepository hotelRepository;
 
+	@Autowired
+	private CurrencyRepository currencyRepository;
+
 	private Booking booking;
 
 	@BeforeEach
@@ -35,7 +37,7 @@ public class BookingRepositoryIntTest {
 		hotelRepository.save(hotel);
 
 		booking = Fixtures.dummyBooking();
-		booking.setExchangeRateToEuro(CurrencyUtils.getRates().get(Currency.EUR));
+		booking.setExchangeRateToEuro(currencyRepository.getRates().get(Currency.EUR));
 		booking.setHotel(hotel);
 	}
 

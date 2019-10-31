@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import com.kalogirou.anixe.domain.Booking;
 import com.kalogirou.anixe.helper.Currency;
-import com.kalogirou.anixe.helper.CurrencyUtils;
 import com.kalogirou.anixe.repository.BookingRepository;
 import com.kalogirou.anixe.repository.CurrencyRepository;
 import com.kalogirou.anixe.service.BookingService;
@@ -27,7 +26,7 @@ public class BookingServiceImpl implements BookingService {
 		Currency currency = booking.getCurrency();
 		Float bookingRate = booking.getExchangeRateToEuro();
 
-		Float rate = bookingRate != null ? bookingRate : CurrencyUtils.getRates().get(currency);
+		Float rate = bookingRate != null ? bookingRate : currencyRepository.getRates().get(currency);
 		return priceAmount / rate;
 	}
 
