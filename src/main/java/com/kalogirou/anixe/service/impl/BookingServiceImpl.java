@@ -21,7 +21,7 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public Float calculatePriceAmountInEuro(Booking booking) {
+	public float calculatePriceAmountInEuro(Booking booking) {
 		Float priceAmount = booking.getPriceAmount();
 		Currency currency = booking.getCurrency();
 		Float bookingRate = booking.getExchangeRateToEuro();
