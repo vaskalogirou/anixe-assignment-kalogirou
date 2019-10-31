@@ -6,6 +6,7 @@ import com.kalogirou.anixe.domain.Booking;
 import com.kalogirou.anixe.helper.Currency;
 import com.kalogirou.anixe.repository.BookingRepository;
 import com.kalogirou.anixe.repository.CurrencyRepository;
+import com.kalogirou.anixe.repository.HotelRepository;
 import com.kalogirou.anixe.service.BookingService;
 
 @Service
@@ -15,9 +16,12 @@ public class BookingServiceImpl implements BookingService {
 
 	private BookingRepository bookingRepository;
 
-	public BookingServiceImpl(CurrencyRepository currencyRepository, BookingRepository bookingRepository) {
+	private HotelRepository hotelRepository;
+
+	public BookingServiceImpl(CurrencyRepository currencyRepository, BookingRepository bookingRepository, HotelRepository hotelRepository) {
 		this.currencyRepository = currencyRepository;
 		this.bookingRepository = bookingRepository;
+		this.hotelRepository = hotelRepository;
 	}
 
 	@Override
@@ -33,6 +37,9 @@ public class BookingServiceImpl implements BookingService {
 	@Override
 	public Booking save(Booking booking) {
 		booking.setExchangeRateToEuro(currencyRepository.getRate(booking.getCurrency()));
+		if (booking.getHotel().getId() == null) {
+			hotelRepository.save(booking.getHotel());
+		}
 		bookingRepository.save(booking);
 		return booking;
 	}
