@@ -3,3 +3,4 @@ id;customer_name;customer_surname;number_of_pax;hotel_id;price_amount;currency;e
 2;Michael;Jackson;1;1;100;USD;1.11
 3;Leo;Tolstoy;5;1;50000;RUB;70.82
 4;Leo;Tolstoy;1;2;1200;RUB;71.05
+5;Anatoli;Tolstoy;5;2;7000;RUB;71.05

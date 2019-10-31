@@ -1,10 +1,12 @@
 package com.kalogirou.anixe.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.kalogirou.anixe.domain.Booking;
+import com.kalogirou.anixe.domain.Hotel;
 import com.kalogirou.anixe.repository.BookingRepository;
 import com.kalogirou.anixe.service.BookingService;
 import com.kalogirou.anixe.service.HotelService;
@@ -29,5 +31,12 @@ public class HotelServiceImpl implements HotelService {
 			sum += bookingService.calculatePriceAmountInEuro(booking);
 		}
 		return sum;
+	}
+
+	@Override
+	public List<Hotel> getDistinctHotelsByCustomerSurname(String customerSurname) {
+		List<Booking> bookings = bookingRepository.findByCustomerSurname(customerSurname);
+		List<Hotel> hotels = bookings.stream().map(Booking::getHotel).distinct().collect(Collectors.toList());
+		return hotels;
 	}
 }
