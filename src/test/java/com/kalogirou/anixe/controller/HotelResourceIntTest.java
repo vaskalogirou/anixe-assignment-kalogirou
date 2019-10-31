@@ -21,13 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kalogirou.anixe.AnixeAssignmentKalogirouApplication;
 import com.kalogirou.anixe.domain.Hotel;
+import com.kalogirou.anixe.fixture.Fixtures;
 import com.kalogirou.anixe.repository.HotelRepository;
 
 @SpringBootTest(classes = AnixeAssignmentKalogirouApplication.class)
 public class HotelResourceIntTest {
-	private static final String DUMMY_NAME = "dummy hotel name";
-	private static final String DUMMY_ADDRESS = "Syntagma Square";
-	private static final float DUMMY_RATING = 8.3f;
 
 	@Autowired
 	private HotelRepository hotelRepository;
@@ -38,10 +36,7 @@ public class HotelResourceIntTest {
 
 	@BeforeEach
 	public void setup() {
-		hotel = new Hotel();
-		hotel.setName(DUMMY_NAME);
-		hotel.setAddress(DUMMY_ADDRESS);
-		hotel.setStarRating(DUMMY_RATING);
+		hotel = Fixtures.dummyHotel();
 
 		final HotelResource hotelResource = new HotelResource(hotelRepository);
 		mockMvc = MockMvcBuilders.standaloneSetup(hotelResource).build();
@@ -111,8 +106,8 @@ public class HotelResourceIntTest {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.[*].id").value(hasItem(hotel.getId().intValue())))
-				.andExpect(jsonPath("$.[*].name").value(hasItem(DUMMY_NAME)))
-				.andExpect(jsonPath("$.[*].address").value(hasItem(DUMMY_ADDRESS)));
+				.andExpect(jsonPath("$.[*].name").value(hasItem(Fixtures.DUMMY_HOTEL_NAME)))
+				.andExpect(jsonPath("$.[*].address").value(hasItem(Fixtures.DUMMY_HOTEL_ADDRESS)));
 	}
 
 	@Test
@@ -123,9 +118,9 @@ public class HotelResourceIntTest {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.id").value(hotel.getId().intValue()))
-				.andExpect(jsonPath("$.name").value(DUMMY_NAME))
-				.andExpect(jsonPath("$.address").value(DUMMY_ADDRESS))
-				.andExpect(jsonPath("$.starRating").value(DUMMY_RATING));
+				.andExpect(jsonPath("$.name").value(Fixtures.DUMMY_HOTEL_NAME))
+				.andExpect(jsonPath("$.address").value(Fixtures.DUMMY_HOTEL_ADDRESS))
+				.andExpect(jsonPath("$.starRating").value(Fixtures.DUMMY_STAR_RATING));
 	}
 
 	@Test

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kalogirou.anixe.AnixeAssignmentKalogirouApplication;
 import com.kalogirou.anixe.domain.Hotel;
+import com.kalogirou.anixe.fixture.Fixtures;
 
 @SpringBootTest(classes = AnixeAssignmentKalogirouApplication.class)
 public class HotelRepositoryIntTest {
@@ -22,9 +23,7 @@ public class HotelRepositoryIntTest {
 
 	@BeforeEach
 	public void setup() {
-		hotel = new Hotel();
-		hotel.setName("dummy name");
-		hotel.setAddress("dummy address");
+		hotel = Fixtures.dummyHotel();
 	}
 
 	@Test

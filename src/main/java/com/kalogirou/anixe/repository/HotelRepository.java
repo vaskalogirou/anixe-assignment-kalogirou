@@ -7,5 +7,4 @@ import com.kalogirou.anixe.domain.Hotel;
 
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
-
 }

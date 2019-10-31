@@ -9,7 +9,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 
 @Aspect
 public class LoggingAspect {
@@ -17,12 +16,6 @@ public class LoggingAspect {
 	// this is NOT the default logger - it is a custom one, that writes to file
 	// and we use it ONLY for the controller package where the user requests reside
 	private final Logger logger = LoggerFactory.getLogger("file-logger");
-
-	private final Environment env;
-
-	public LoggingAspect(Environment env) {
-		this.env = env;
-	}
 
 	@Pointcut("within(com.kalogirou.anixe.controller..*)")
 	public void applicationPackagePointcut() {
