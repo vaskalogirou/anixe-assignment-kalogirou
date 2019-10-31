@@ -1,8 +1,20 @@
+
+#spring:
+#  datasource:
+#    type: com.zaxxer.hikari.HikariDataSource
+#    url: jdbc:postgresql://localhost:5432/anixe
+#    username: postgres
+#    password: admin
+#    hikari:
+#      auto-commit: false
+      
+
 spring:
-  datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/anixe
-    username: postgres
-    password: admin
-    hikari:
-      auto-commit: false
+    datasource:
+      type: com.zaxxer.hikari.HikariDataSource
+      url: jdbc:h2:mem:jhipstertest;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+      username: anixe
+      password:
+      hikari:
+        poolName: Hikari
+        auto-commit: false
