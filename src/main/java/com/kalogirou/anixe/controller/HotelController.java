@@ -77,4 +77,10 @@ public class HotelController {
 		float sum = hotelService.calculateSumOfPriceAmountsInEuroByHotelId(id);
 		return ResponseEntity.ok(sum);
 	}
+
+	@GetMapping("/hotels-for-surname/{customerSurname}")
+	public ResponseEntity<List<Hotel>> getDistinctHotelsByCustomerSurname(@PathVariable String customerSurname) {
+		List<Hotel> hotels = hotelService.getDistinctHotelsByCustomerSurname(customerSurname);
+		return ResponseEntity.ok(hotels);
+	}
 }

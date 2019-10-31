@@ -2,6 +2,7 @@ package com.kalogirou.anixe.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -20,8 +21,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kalogirou.anixe.AnixeAssignmentKalogirouApplication;
+import com.kalogirou.anixe.domain.Booking;
 import com.kalogirou.anixe.domain.Hotel;
 import com.kalogirou.anixe.fixture.Fixtures;
+import com.kalogirou.anixe.repository.BookingRepository;
 import com.kalogirou.anixe.repository.HotelRepository;
 import com.kalogirou.anixe.service.HotelService;
 
@@ -33,6 +36,9 @@ public class HotelControllerIntTest {
 
 	@Autowired
 	private HotelService hotelService;
+
+	@Autowired
+	private BookingRepository bookingRepository;
 
 	private MockMvc mockMvc;
 
@@ -170,4 +176,39 @@ public class HotelControllerIntTest {
 		assertThat(updatedHotel.getAddress()).isEqualTo(updatedAddress);
 		assertThat(updatedHotel.getStarRating()).isEqualTo(updatedRating);
 	}
+
+	@Test
+	@Transactional
+	public void getDistinctHotelsByCustomerSurname() throws Exception {
+		Hotel firstHotel = Fixtures.dummyHotel();
+		firstHotel.setName("first hotel");
+		hotelRepository.save(firstHotel);
+
+		Hotel secondHotel = Fixtures.dummyHotel();
+		secondHotel.setName("second hotel");
+		hotelRepository.save(secondHotel);
+
+		String customerSurname = "loyal customer";
+		Booking bookingAlpha = Fixtures.dummyBooking();
+		bookingAlpha.setHotel(firstHotel);
+		bookingAlpha.setCustomerSurname(customerSurname);
+		bookingRepository.save(bookingAlpha);
+
+		Booking bookingBravo = Fixtures.dummyBooking();
+		bookingBravo.setHotel(secondHotel);
+		bookingBravo.setCustomerSurname(customerSurname);
+		bookingRepository.save(bookingBravo);
+
+		Booking bookingCharlie = Fixtures.dummyBooking();
+		bookingCharlie.setHotel(secondHotel);
+		bookingCharlie.setCustomerSurname(customerSurname);
+		bookingRepository.save(bookingCharlie);
+
+		mockMvc.perform(get("/api/hotels-for-surname/{customerSurname}", customerSurname))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(2)))
+				.andExpect(jsonPath("$.[*].name").value(hasItem("first hotel")))
+				.andExpect(jsonPath("$.[*].name").value(hasItem("second hotel")));
+	}
+
 }
