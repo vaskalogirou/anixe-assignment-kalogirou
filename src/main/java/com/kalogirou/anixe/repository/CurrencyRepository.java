@@ -18,4 +18,8 @@ public class CurrencyRepository {
 		rates.put(Currency.RUB, 70.82f);
 		return rates;
 	}
+
+	public Float getRate(Currency currency) {
+		return getRates().get(currency);
+	}
 }

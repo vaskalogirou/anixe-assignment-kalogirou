@@ -27,6 +27,9 @@ public class BookingServiceImplTest {
 		assertThat(amountInEuro).isCloseTo(booking.getPriceAmount(), within(0.001f));
 	}
 
+	@Test
 	public void calculatePriceAmountInEuroWhenBookingIsNotInEuro() {
+		Booking booking = new Booking();
+		booking.setCurrency(Currency.USD);
 	}
 }

@@ -37,7 +37,7 @@ public class BookingRepositoryIntTest {
 		hotelRepository.save(hotel);
 
 		booking = Fixtures.dummyBooking();
-		booking.setExchangeRateToEuro(currencyRepository.getRates().get(Currency.EUR));
+		booking.setExchangeRateToEuro(currencyRepository.getRate(Currency.EUR));
 		booking.setHotel(hotel);
 	}
 

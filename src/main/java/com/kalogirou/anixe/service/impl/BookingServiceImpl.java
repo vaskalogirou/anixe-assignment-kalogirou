@@ -26,13 +26,13 @@ public class BookingServiceImpl implements BookingService {
 		Currency currency = booking.getCurrency();
 		Float bookingRate = booking.getExchangeRateToEuro();
 
-		Float rate = bookingRate != null ? bookingRate : currencyRepository.getRates().get(currency);
+		Float rate = bookingRate != null ? bookingRate : currencyRepository.getRate(currency);
 		return priceAmount / rate;
 	}
 
 	@Override
 	public Booking save(Booking booking) {
-		booking.setExchangeRateToEuro(currencyRepository.getRates().get(booking.getCurrency()));
+		booking.setExchangeRateToEuro(currencyRepository.getRate(booking.getCurrency()));
 		bookingRepository.save(booking);
 		return booking;
 	}
