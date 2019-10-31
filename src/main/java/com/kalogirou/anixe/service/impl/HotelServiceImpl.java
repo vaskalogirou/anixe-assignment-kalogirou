@@ -26,8 +26,7 @@ public class HotelServiceImpl implements HotelService {
 		List<Booking> bookings = bookingRepository.findAllByHotelId(id);
 		float sum = 0f;
 		for (Booking booking : bookings) {
-			float priceAmountInEuro = bookingService.calculatePriceAmountInEuro(booking);
-			sum += priceAmountInEuro;
+			sum += bookingService.calculatePriceAmountInEuro(booking);
 		}
 		return sum;
 	}
