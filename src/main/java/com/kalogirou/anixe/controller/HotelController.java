@@ -48,7 +48,7 @@ public class HotelController {
 	}
 
 	@GetMapping("/hotels/{id}")
-	public ResponseEntity<?> getHotel(@PathVariable Long id) {
+	public ResponseEntity<?> getHotelById(@PathVariable Long id) {
 		Optional<Hotel> hotel = hotelRepository.findById(id);
 		if (hotel.isPresent()) {
 			return ResponseEntity.ok(hotel.get());

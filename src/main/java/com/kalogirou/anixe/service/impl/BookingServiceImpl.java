@@ -12,16 +12,16 @@ import com.kalogirou.anixe.service.BookingService;
 @Service
 public class BookingServiceImpl implements BookingService {
 
-	private CurrencyRepository currencyRepository;
-
 	private BookingRepository bookingRepository;
 
 	private HotelRepository hotelRepository;
 
-	public BookingServiceImpl(CurrencyRepository currencyRepository, BookingRepository bookingRepository, HotelRepository hotelRepository) {
-		this.currencyRepository = currencyRepository;
+	private CurrencyRepository currencyRepository;
+
+	public BookingServiceImpl(BookingRepository bookingRepository, HotelRepository hotelRepository, CurrencyRepository currencyRepository) {
 		this.bookingRepository = bookingRepository;
 		this.hotelRepository = hotelRepository;
+		this.currencyRepository = currencyRepository;
 	}
 
 	@Override
